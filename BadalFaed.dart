@@ -11,6 +11,10 @@ class _BadalFaedState extends State<BadalFaed> {
   final ImagePicker _imagePicker = ImagePicker();
   XFile? _selectedImage;
 
+  final TextEditingController _visaNumberController = TextEditingController();
+  final TextEditingController _expiryDateController = TextEditingController();
+  final TextEditingController _cvvController = TextEditingController();
+
   void _selectImage() async {
     final XFile? image = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (image != null) {
@@ -34,23 +38,26 @@ class _BadalFaedState extends State<BadalFaed> {
     // Validate visa details and show success message
     // You can customize this logic based on your requirements
     // For simplicity, let's assume visaNumber should be 16 digits
-    final String visaNumber = '1234567890123456'; // Replace with actual value from form input
-    final String expiryDate = 'MM/YY'; // Replace with actual value from form input
-    final String cvv = '123'; // Replace with actual value from form input
+    final String visaNumber = _visaNumberController.text;
+    final String expiryDate = _expiryDateController.text;
+    final String cvv = _cvvController.text;
 
-    if (visaNumber.length != 16) {
+    if (visaNumber.isEmpty ||
+        visaNumber.length != 16 ||
+        expiryDate.isEmpty ||
+        cvv.isEmpty) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Invalid Visa Number'),
-            content: Text('The entered visa number is invalid. Please make sure it has 16 digits.'),
+            title: Text('Invalid Entry'),
+            content: Text('Please fill all the required fields correctly.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                 },
-                child: Text('OK'),
+                child: Text('تاكبد'),
               ),
             ],
           );
@@ -68,13 +75,21 @@ class _BadalFaedState extends State<BadalFaed> {
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                 },
-                child: Text('OK'),
+                child: Text('تاكيد'),
               ),
             ],
           );
         },
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _visaNumberController.dispose();
+    _expiryDateController.dispose();
+    _cvvController.dispose();
+    super.dispose();
   }
 
   @override
@@ -144,7 +159,7 @@ class _BadalFaedState extends State<BadalFaed> {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          'اختر من المعرض',
+                          'اختر من الصور',
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -195,7 +210,7 @@ class _BadalFaedState extends State<BadalFaed> {
               SizedBox(height: 16),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'تاريخ الانتهاء (MM/YY)',
+                  labelText: '(MM/YY)',
                   border: OutlineInputBorder(),
                 ),
               ),
