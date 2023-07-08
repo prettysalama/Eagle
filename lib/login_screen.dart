@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/UserPage.dart';
+import 'package:new_app/TheTwoOptions.dart';
 import 'package:new_app/police_department.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else if (enteredID.length == 14) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => UsersPage()),
+        MaterialPageRoute(builder: (context) => TheTwoOptions()),
       );
     } else {
       showDialog(
@@ -64,7 +64,13 @@ class _LoginScreenState extends State<LoginScreen> {
           reverse: true,
           child: Column(
             children: [
-              Image.asset('Assets/images/Eagle.jpeg'),
+              Image.asset(
+                'assets/Eagle.png',
+                width: 200,
+                height: 200,
+              )
+
+              ,
               TextFormField(
                 controller: IDController,
                 onFieldSubmitted: (value) {

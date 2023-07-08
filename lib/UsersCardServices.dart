@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/BadalFaed.dart';
+import 'package:new_app/UpdateLicense.dart';
 import 'package:new_app/UsersComplains.dart';
 import 'package:new_app/UsersQueries.dart';
 import 'package:new_app/UsersServices.dart';
@@ -86,7 +88,7 @@ class _UsersCardServicesState extends State<UsersCardServices> {
               width: 300,
               child: MaterialButton(
                 onPressed: () => Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => UsersQueries(),
+                  builder: (context) => BadalFaed(),
                 ),),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -191,7 +193,12 @@ class _UsersCardServicesState extends State<UsersCardServices> {
             MaterialButton(
               onPressed: () {
                 // TODO: Save the entered details to the database
-                Navigator.of(context).pop();
+
+                // Navigate to the UpdateLicense page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UpdateLicense()),
+                );
               },
               child: Text(
                 'تأكيد',

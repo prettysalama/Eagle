@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 
 class FineCreation extends StatefulWidget {
@@ -47,6 +49,42 @@ class _FineCreationState extends State<FineCreation> {
 
   ];
   String? selectedValue;
+
+  var priceController = TextEditingController();
+
+  bool isLoading = false;
+  void _performAction() {
+    setState(() {
+      isLoading = true;
+    });
+
+    // TODO: Perform action here
+
+    // Simulate the action taking some time
+    Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        isLoading = false;
+      });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('تم تحرير المخالفة بنجاح'),
+            actions: [
+              TextButton(
+                child: Text('حسنا'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +141,7 @@ class _FineCreationState extends State<FineCreation> {
                       child: Text(
                         item,
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -161,62 +199,179 @@ class _FineCreationState extends State<FineCreation> {
                 ),
               ),
             ),
-            SizedBox(height: 15,),
-            Container(
-              width: 260,
-              height: 50,
-              padding: const EdgeInsets.only(left: 14, right: 14),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(14)),
-                border: Border.all(
-                  color: Colors.black26,
+    Padding(
+    padding: const EdgeInsets.only(top: 20),
+    child: Center(
+    child: SizedBox(
+    width: 250,
+    child: TextFormField(
+    controller: widget.PriceController,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+    hintText: 'ادخل السعر',
+    hintStyle: TextStyle(fontSize: 18),
+    enabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(14),
+    borderSide: BorderSide(
+    color: Colors.black26,
+    ),
+    ),
+    focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(14),
+    borderSide: BorderSide(
+    color: Theme.of(context).primaryColor,
+    ),
+    ),
+    filled: true,
+    fillColor: Colors.white,
+    contentPadding: const EdgeInsets.only(
+    left: 14,
+    right: 14,
+    top: 20,
+    bottom: 20,
+    ),
+    ),
+    style: const TextStyle(
+    fontSize: 18,
+    color: Colors.black,
+    ),
+    ),
+    ),
+    ),
+    ),        Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: MaterialButton(
+                onPressed: () async {
+
+                  String priceText = widget.PriceController.text;
+                  int price = 0;
+
+                  try {
+                    price = int.parse(priceText);
+                  } catch (e) {
+                    String errorMessage = "An error occurred: ${e.toString()}";
+                    print(errorMessage);
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Invalid Value"),
+                          content: Container(
+                            width: 300, // Adjust the width as needed
+                            height: 150, // Adjust the height as needed
+                            child: Text("You must enter a numeric value"),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("OK"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+
+
+                  var url = 'http://192.168.1.14:5191/Tickets'; // Replace with your C# API endpoint URL
+
+                  var requestBody = {
+                    'type': selectedValue,
+                    'price': price,
+                  };
+
+                  try {
+                    var response = await http.post(
+                      Uri.parse(url),
+                      body: jsonEncode(requestBody),
+                      headers: {'Content-Type': 'application/json'},
+                    );
+
+                    if (response.statusCode == 200) {
+                      // API request was successful
+                      var serverResponse = response.body;
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Server Response'),
+                            content: Text(serverResponse),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      // API request failed
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('API Error'),
+                            content: Text('Failed to send the request. Please try again.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  } catch (e) {
+                    String errorMessage = 'An error occurred: ${e.toString()}';
+                    print(errorMessage);
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Error'),
+                          content: Text('An error occurred. Please try again.\n\n$errorMessage'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                child: Text(
+                  'تحرير المخالفة',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
+                textColor: Colors.white,
                 color: Color(0xFF0C2B36),
-
-              ),
-              child: TextFormField(
-                  controller:PriceController,
-                  onFieldSubmitted: (value)
-                  {
-                    // ignore: avoid_print
-                    print(value);
-                  },
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: "حدد سعر المخالفة",
-                    labelStyle: TextStyle(fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,),
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.attach_money), iconColor: Colors.white,
-
-
-
-                  )
-              ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                minWidth: 200,
+                height: 50,
+              )
+              ,
             ),
-            SizedBox(height: 75,),
-            MaterialButton(onPressed:(){;
-            },
-                child:Container(
-                    height: 40,
-
-                    color: Color(0xFF0C2B36),
-                    width: 260,
-
-
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text("تحرير مخالفة",style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,),
-                        textAlign: TextAlign.center,
-                      ),
-                    )))]
+          ],
       ),
-
-
     );
   }
 }
