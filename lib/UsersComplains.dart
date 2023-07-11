@@ -84,13 +84,14 @@ class _UsersComplainsState extends State<UsersComplains> {
     String visaMMYY = "";
 
     await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("تفاصيل الغرامة"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text("تفاصيل الغرامة"),
+          content: SingleChildScrollView(
+          child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
               TextField(
                 decoration: InputDecoration(
                   labelText: "رقم الغرامة",
@@ -133,7 +134,7 @@ class _UsersComplainsState extends State<UsersComplains> {
     flex: 1,
     child: TextField(
     decoration: InputDecoration(
-    labelText: "PIN",
+    labelText: "CVV",
     ),
     onChanged: (value) {
     visaPin = value;
@@ -192,7 +193,7 @@ class _UsersComplainsState extends State<UsersComplains> {
     borderRadius: BorderRadius.circular(20),
     side: BorderSide(color: Color(0xFF0C2B36)),
     ),
-    ),),),],),],),);}
+    ),),),],),],),));}
     );
   }
 }

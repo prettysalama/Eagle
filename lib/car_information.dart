@@ -1,24 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/fine%20creation.dart';
 
-class Car {
-    final String type;
-    final String owner;
-    final String plateNumber;
-    final String color;
-    final String licenseDate;
-    final String licenseExpiryDate;
-
-    Car({
-        required this.type,
-        required this.owner,
-        required this.plateNumber,
-        required this.color,
-        required this.licenseDate,
-        required this.licenseExpiryDate,
-    });
-}
-
 class CarInfo extends StatelessWidget {
     final Car car;
 
@@ -166,7 +148,10 @@ class CarInfo extends StatelessWidget {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) => FineCreation(),
+                                                    builder: (context) => FineCreation(
+                                                        car: car,
+                                                        carPlateNumber: car.plateNumber,
+                                                    ),
                                                 ),
                                             );
                                         },

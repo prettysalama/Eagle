@@ -7,6 +7,9 @@ import 'package:new_app/UsersQueries.dart';
 
 
 class UsersServices extends StatelessWidget {
+  final String carPlateNumber;
+
+  UsersServices({required this.carPlateNumber});
   void _showContactDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -72,7 +75,8 @@ class UsersServices extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UsersQueries()),
+                  MaterialPageRoute(          builder: (context) => UsersQueries(carPlateNumber: carPlateNumber),
+                  ),
                 );
               },
               style: ButtonStyle(
@@ -84,7 +88,7 @@ class UsersServices extends StatelessWidget {
                 ),
               ),
               child: Text(
-                "استعلامات",
+                "استعلامات وتظلمات",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,

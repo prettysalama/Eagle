@@ -11,9 +11,7 @@ class UsersCardServices extends StatefulWidget {
 }
 
 class _UsersCardServicesState extends State<UsersCardServices> {
-  String id = '';
-  String driversType = '';
-  String licenseUnit = '';
+  TextEditingController carPlateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +61,12 @@ class _UsersCardServicesState extends State<UsersCardServices> {
             SizedBox(
               width: 300,
               child: MaterialButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => UsersQueries(),
-                ),),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UsersQueries(carPlateNumber: carPlateController.text),
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -87,9 +88,12 @@ class _UsersCardServicesState extends State<UsersCardServices> {
             SizedBox(
               width: 300,
               child: MaterialButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => BadalFaed(),
-                ),),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BadalFaed(),
+                  ),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -112,6 +116,7 @@ class _UsersCardServicesState extends State<UsersCardServices> {
       ),
     );
   }
+
   void _showDetailsDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -122,10 +127,14 @@ class _UsersCardServicesState extends State<UsersCardServices> {
             child: Column(
               children: [
                 TextFormField(
-                  onChanged: (value) => id = value,
-                  decoration: InputDecoration(labelText: 'ID'),
+                  controller: carPlateController,
+                  onChanged: (value) {
+                    // Handle changes to the car plate number
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'رقم لوحة السيارة',
+                  ),
                 ),
-
               ],
             ),
           ),
@@ -143,8 +152,6 @@ class _UsersCardServicesState extends State<UsersCardServices> {
             ),
             MaterialButton(
               onPressed: () {
-                // TODO: Save the entered details to the database
-                // and display the confirmation dialog
                 _showConfirmationDialog(context);
               },
               child: Text(
@@ -171,9 +178,7 @@ class _UsersCardServicesState extends State<UsersCardServices> {
           content: SingleChildScrollView(
             child: Column(
               children: [
-                Text('ID: $id'),
-                Text('Drivers Type: $driversType'),
-                Text('License Unit: $licenseUnit'),
+                Text('رقم لوحة السيارة: ${carPlateController.text}'),
               ],
             ),
           ),
@@ -183,7 +188,6 @@ class _UsersCardServicesState extends State<UsersCardServices> {
               child: Text(
                 'تعديل',
                 style: TextStyle(color: Colors.white),
-
               ),
               color: Color(0xFF0C2B36),
               shape: RoundedRectangleBorder(
@@ -192,19 +196,17 @@ class _UsersCardServicesState extends State<UsersCardServices> {
             ),
             MaterialButton(
               onPressed: () {
-                // TODO: Save the entered details to the database
-
-                // Navigate to the UpdateLicense page
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UpdateLicense()),
+                  MaterialPageRoute(
+                    builder: (context) => UpdateLicense(),
+                  ),
                 );
               },
               child: Text(
                 'تأكيد',
                 style: TextStyle(color: Colors.white),
               ),
-              color: Color(0xFF0C2B36),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),

@@ -3,8 +3,29 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+class Car {
+  final String type;
+  final String owner;
+  final String plateNumber;
+  final String color;
+  final String licenseDate;
+  final String licenseExpiryDate;
+
+  Car({
+    required this.type,
+    required this.owner,
+    required this.plateNumber,
+    required this.color,
+    required this.licenseDate,
+    required this.licenseExpiryDate,
+  });
+}
 
 class FineCreation extends StatefulWidget {
+  final Car car;
+  final String carPlateNumber;
+
+  FineCreation({required this.car, required this.carPlateNumber});
   var PriceController= TextEditingController();
   @override
   State<FineCreation> createState() => _FineCreationState();
@@ -276,12 +297,14 @@ class _FineCreationState extends State<FineCreation> {
                   }
 
 
-                  var url = 'http://192.168.1.14:5191/Tickets'; // Replace with your C# API endpoint URL
+                  var url = 'http://192.168.1.14:5191/Tickets/AddTicket'; // Replace with your C# API endpoint URL
 
                   var requestBody = {
                     'type': selectedValue,
                     'price': price,
+                    'carPlateNumber': widget.carPlateNumber,
                   };
+
 
                   try {
                     var response = await http.post(
